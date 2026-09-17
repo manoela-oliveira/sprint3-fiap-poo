@@ -1,6 +1,6 @@
 package br.com.sistemamotiva.model;
 
-public class Autoestrada extends TrechoRodovia {
+public class Autoestrada extends TrechoRodoviaDAO {
     private int quantidadeFaixas;
 
     public Autoestrada(IdentificacaoTrecho identificador, double nivelVegetacao, int quantidadeFaixas) {

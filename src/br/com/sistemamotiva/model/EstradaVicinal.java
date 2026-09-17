@@ -1,6 +1,6 @@
 package br.com.sistemamotiva.model;
 
-public class EstradaVicinal extends TrechoRodovia {
+public class EstradaVicinal extends TrechoRodoviaDAO {
     private boolean isPavimentada;
 
     public EstradaVicinal(IdentificacaoTrecho identificador, double nivelVegetacao, boolean isPavimentada) {

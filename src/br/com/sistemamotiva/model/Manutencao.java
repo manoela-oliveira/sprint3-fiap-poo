@@ -10,11 +10,11 @@ package br.com.sistemamotiva.model;
 
 public class Manutencao {
     private String data;
-    private EquipeManutencao responsavel;
-    private TrechoRodovia localizador;
-    private IntervencaoOperacional servico; 
+    private EquipeManutencaoDAO responsavel;
+    private TrechoRodoviaDAO localizador;
+    private IntervencaoOperacionalDAO servico; 
 
-    public Manutencao(String data, EquipeManutencao responsavel, TrechoRodovia localizador, IntervencaoOperacional servico) {
+    public Manutencao(String data, EquipeManutencaoDAO responsavel, TrechoRodoviaDAO localizador, IntervencaoOperacionalDAO servico) {
         this.setData(data);
         this.responsavel = responsavel;
         this.localizador = localizador;
@@ -33,19 +33,19 @@ public class Manutencao {
         }
     }
 
-    public EquipeManutencao getResponsavel() {
+    public EquipeManutencaoDAO getResponsavel() {
         return this.responsavel;
     }
 
-    public TrechoRodovia getLocalizador() {
+    public TrechoRodoviaDAO getLocalizador() {
         return this.localizador;
     }
 
-    public IntervencaoOperacional getDefinirServico() {
+    public IntervencaoOperacionalDAO getDefinirServico() {
         return this.servico;
     }
 
-    private void setDefinirServico(IntervencaoOperacional servicoRecomendado) {
+    private void setDefinirServico(IntervencaoOperacionalDAO servicoRecomendado) {
         if (servicoRecomendado != null) {
             this.servico = servicoRecomendado;
         } else {

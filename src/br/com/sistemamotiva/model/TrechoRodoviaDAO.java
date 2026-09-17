@@ -4,7 +4,7 @@ package br.com.sistemamotiva.model;
   em contextos de manutenção, é necessário saber características como; é uma pista dupla ou simples?
   Possui acostamento? É asfaltada? Possui canteiros? Etc.*/
 
-public abstract class TrechoRodovia {
+public abstract class TrechoRodoviaDAO {
     private double nivelVegetacaoCm;
     private boolean regiaoUmida; 
 
@@ -13,7 +13,7 @@ public abstract class TrechoRodovia {
       qual é o trecho, onde ele começa e onde termina. */
     private IdentificacaoTrecho identificador;
 
-    public TrechoRodovia(IdentificacaoTrecho identificador, double nivelVegetacaoCm) {
+    public TrechoRodoviaDAO(IdentificacaoTrecho identificador, double nivelVegetacaoCm) {
         this.identificador = identificador;
         this.setNivelVegetacaoCm(nivelVegetacaoCm);
         this.regiaoUmida = false; 

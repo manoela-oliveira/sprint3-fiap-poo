@@ -1,10 +1,10 @@
 package br.com.sistemamotiva.model;
 
-public class EquipeManutencao {
+public class EquipeManutencaoDAO {
     private String identificadorEquipe;
     private int quantidadeMembros;
 
-    public EquipeManutencao(String identificadorEquipe, int quantidadeMembros) {
+    public EquipeManutencaoDAO(String identificadorEquipe, int quantidadeMembros) {
         this.setIdentificadorEquipe(identificadorEquipe);
         this.setQuantidadeMembros(quantidadeMembros);
     }
@@ -37,7 +37,7 @@ public class EquipeManutencao {
     /**
      * Realiza um serviço específico de intervenção operacional no trecho rodoviário designado.
      */
-    public void realizarTrabalho(IntervencaoOperacional servico, TrechoRodovia trechoAlvo) {
+    public void realizarTrabalho(IntervencaoOperacionalDAO servico, TrechoRodoviaDAO trechoAlvo) {
         System.out.println("Equipe " + this.identificadorEquipe + " mobilizada para execução.");
         servico.executarServico(trechoAlvo);
     }

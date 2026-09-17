@@ -11,10 +11,10 @@ public class SistemaMonitoramento {
         System.out.println("\n>>> [TESTE 1] Validando crescimento acelerado em regiões úmidas");
         
         IdentificacaoTrecho localSeco = new IdentificacaoTrecho("BR-101-SECO", 0, 10);
-        TrechoRodovia trechoSeco = new Autoestrada(localSeco, 10.0, 2);
+        TrechoRodoviaDAO trechoSeco = new Autoestrada(localSeco, 10.0, 2);
 
         IdentificacaoTrecho localUmido = new IdentificacaoTrecho("BR-101-UMIDO", 10, 20);
-        TrechoRodovia trechoUmido = new Autoestrada(localUmido, 10.0, 2);
+        TrechoRodoviaDAO trechoUmido = new Autoestrada(localUmido, 10.0, 2);
         trechoUmido.marcarComoRegiaoUmida();
 
         System.out.println("--- Estado Inicial ---");
@@ -49,15 +49,15 @@ public class SistemaMonitoramento {
         System.out.println("\n>>> [TESTE 3] Geração do Relatório Automático de Prioridades e Intervenções");
 
         IdentificacaoTrecho loc1 = new IdentificacaoTrecho("BR-040", 20, 30);
-        TrechoRodovia rodoviaCritica = new Autoestrada(loc1, 35.0, 4); // Prioridade CRITICA
+        TrechoRodoviaDAO rodoviaCritica = new Autoestrada(loc1, 35.0, 4); // Prioridade CRITICA
 
         IdentificacaoTrecho loc2 = new IdentificacaoTrecho("BR-116", 200, 210);
-        TrechoRodovia rodoviaAlta = new Autoestrada(loc2, 25.0, 4); // Prioridade ALTA
+        TrechoRodoviaDAO rodoviaAlta = new Autoestrada(loc2, 25.0, 4); // Prioridade ALTA
 
         IdentificacaoTrecho loc3 = new IdentificacaoTrecho("VIC-B", 0, 8);
-        TrechoRodovia vicinalBaixa = new EstradaVicinal(loc3, 12.0, true); // Prioridade BAIXA
+        TrechoRodoviaDAO vicinalBaixa = new EstradaVicinal(loc3, 12.0, true); // Prioridade BAIXA
 
-        TrechoRodovia[] malhaRodoviaria = new TrechoRodovia[] {
+        TrechoRodoviaDAO[] malhaRodoviaria = new TrechoRodoviaDAO[] {
             rodoviaCritica,
             rodoviaAlta,
             vicinalBaixa
@@ -66,7 +66,7 @@ public class SistemaMonitoramento {
 
         // Simulação de ordem de serviço controlada no fluxo tradicional
         System.out.println("\n>>> [TESTE 4] Acionamento de intervenção com equipe de campo");
-        EquipeManutencao equipeGama = new EquipeManutencao("Gama", 3);
+        EquipeManutencaoDAO equipeGama = new EquipeManutencaoDAO("Gama", 3);
         Manutencao osPulverizacao = new Manutencao("25/08/2026", equipeGama, rodoviaAlta, new Pulverizacao());
         osPulverizacao.executarManutencao();
 
@@ -87,7 +87,7 @@ public class SistemaMonitoramento {
         System.out.println("\n>>> [TESTE 6] Validando eficiência do sistema frente a dados inválidos");
 
         System.out.println("\n--- Testando criação de equipe com tamanho insuficiente ---");
-        EquipeManutencao equipeInvalida = new EquipeManutencao("Gama-Invalida", 1);
+        EquipeManutencaoDAO equipeInvalida = new EquipeManutencaoDAO("Gama-Invalida", 1);
         System.out.println("Membros finais atribuídos: " + equipeInvalida.getQuantidadeMembros());
 
         System.out.println("\n--- Testando quilometragem negativa no trecho ---");
@@ -96,7 +96,7 @@ public class SistemaMonitoramento {
 
         System.out.println("\n--- Testando limite de proteção ecológica ---");
         IdentificacaoTrecho locTeste = new IdentificacaoTrecho("BR-Teste", 100, 105);
-        TrechoRodovia trechoTeste = new Autoestrada(locTeste, 30.0, 2);
+        TrechoRodoviaDAO trechoTeste = new Autoestrada(locTeste, 30.0, 2);
         
         System.out.println("Vegetação inicial: " + trechoTeste.getNivelVegetacaoCm() + "cm");
         trechoTeste.atualizarNivelVegetacao(2.0);
