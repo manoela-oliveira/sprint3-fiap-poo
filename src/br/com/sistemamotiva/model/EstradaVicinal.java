@@ -22,4 +22,9 @@ public class EstradaVicinal extends TrechoRodovia {
         }
         return "BAIXA";
     }
+
+    @Override
+    public String getTipo() {
+        return "ESTRADA_VICINAL";
+    }
 }

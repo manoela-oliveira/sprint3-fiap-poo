@@ -30,4 +30,9 @@ public class Autoestrada extends TrechoRodovia {
         }
         return "BAIXA";
     }
+
+    @Override
+    public String getTipo() {
+        return "AUTOESTRADA";
+    }
 }
