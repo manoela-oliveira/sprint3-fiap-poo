@@ -1,13 +1,5 @@
 package br.com.sistemamotiva.model;
 
-/*Criando relacionamento/associação entre Manutencao + EquipeManutencao + TrechoRodovia
-  + IntervencaoOperacional
-
-  Para uma manutenção acontecer precisamos saber:
-  - Data marcada
-  - Equipe responsável
-  - Local*/
-
 public class Manutencao {
     private String data;
     private EquipeManutencao responsavel;
