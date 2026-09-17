@@ -6,12 +6,12 @@ package br.com.sistemamotiva.model;
 
 public class RegrasNegocio {
 
-    public void gerarRelatorioPrioridade(TrechoRodoviaDAO[] trechos) {
+    public void gerarRelatorioPrioridade(TrechoRodovia[] trechos) {
         System.out.println("\n========================================================");
         System.out.println("      RELATÓRIO AUTOMÁTICO DE PRIORIDADE DE ROÇADA      ");
         System.out.println("========================================================");
 
-        for (TrechoRodoviaDAO trecho : trechos) {
+        for (TrechoRodovia trecho : trechos) {
             String prioridade = trecho.calcularPrioridade();
             String identificador = trecho.getIdentificador().getCodigoIdentificacao();
             double kmInicial = trecho.getIdentificador().getQuilometroInicial();
@@ -23,11 +23,11 @@ public class RegrasNegocio {
 
             if (prioridade.equals("CRITICA")) {
                 System.out.println("-> Recomendação: Roçada Mecanizada Imediata.");
-                IntervencaoOperacionalDAO servico = new RocadaMecanizada();
+                IntervencaoOperacional servico = new RocadaMecanizada();
                 servico.executarServico(trecho);
             } else if (prioridade.equals("ALTA")) {
                 System.out.println("-> Recomendação: Pulverização Preventiva Química.");
-                IntervencaoOperacionalDAO servico = new Pulverizacao();
+                IntervencaoOperacional servico = new Pulverizacao();
                 servico.executarServico(trecho);
             } else {
                 System.out.println("-> Recomendação: Monitoramento Preventivo (Sem intervenção necessária).");

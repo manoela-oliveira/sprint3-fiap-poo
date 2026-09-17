@@ -12,7 +12,7 @@ public class Manutencao {
     private String data;
     private EquipeManutencao responsavel;
     private TrechoRodovia localizador;
-    private IntervencaoOperacionalDAO servico; 
+    private IntervencaoOperacional servico; 
 
     public Manutencao(String data, EquipeManutencao responsavel, TrechoRodovia localizador, IntervencaoOperacional servico) {
         this.setData(data);
@@ -37,11 +37,11 @@ public class Manutencao {
         return this.responsavel;
     }
 
-    public TrechoRodoviaDAO getLocalizador() {
+    public TrechoRodovia getLocalizador() {
         return this.localizador;
     }
 
-    public IntervencaoOperacionalDAO getDefinirServico() {
+    public IntervencaoOperacional getDefinirServico() {
         return this.servico;
     }
 
