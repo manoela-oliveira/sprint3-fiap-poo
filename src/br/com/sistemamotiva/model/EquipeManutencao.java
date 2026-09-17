@@ -1,44 +1,54 @@
 package br.com.sistemamotiva.model;
 
 public class EquipeManutencao {
+    private Long id;
     private String identificadorEquipe;
     private int quantidadeMembros;
+
+    public EquipeManutencao() {}
 
     public EquipeManutencao(String identificadorEquipe, int quantidadeMembros) {
         this.setIdentificadorEquipe(identificadorEquipe);
         this.setQuantidadeMembros(quantidadeMembros);
     }
 
-    public String getIdentificadorEquipe() {
-        return identificadorEquipe;
+    public EquipeManutencao(Long id, String identificadorEquipe, int quantidadeMembros) {
+        this(identificadorEquipe, quantidadeMembros);
+        this.id = id;
     }
 
-    private void setIdentificadorEquipe(String nome) {
-        if (nome != null) {
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getIdentificadorEquipe() { return identificadorEquipe; }
+
+    public void setIdentificadorEquipe(String nome) {
+        if (nome != null && !nome.trim().isEmpty()) {
             this.identificadorEquipe = nome;
         } else {
-            System.out.println("Erro! Informe o nome para que a equipe de manutenção seja identificada.");
+            System.out.println("Erro! Informe o nome para que a equipe seja identificada.");
+            this.identificadorEquipe = "EQUIPE-PADRAO";
         }
     }
 
-    public int getQuantidadeMembros() {
-        return quantidadeMembros;
-    }
+    public int getQuantidadeMembros() { return quantidadeMembros; }
 
-    private void setQuantidadeMembros(int quantidadeMembros) {
+    public void setQuantidadeMembros(int quantidadeMembros) {
         if (quantidadeMembros >= 2) {
             this.quantidadeMembros = quantidadeMembros;
         } else {
-            System.out.println("Erro! Por segurança, a equipe de manutenção deve ser composta por ao menos 2 membros.");
+            System.out.println("Erro! A equipe de manutenção deve ter ao menos 2 membros.");
             this.quantidadeMembros = 2;
         }
     }
 
-    /**
-     * Realiza um serviço específico de intervenção operacional no trecho rodoviário designado.
-     */
     public void realizarTrabalho(IntervencaoOperacional servico, TrechoRodovia trechoAlvo) {
         System.out.println("Equipe " + this.identificadorEquipe + " mobilizada para execução.");
         servico.executarServico(trechoAlvo);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Equipe[id=%d, nome=%s, membros=%d]", id, identificadorEquipe, quantidadeMembros);
     }
 }
