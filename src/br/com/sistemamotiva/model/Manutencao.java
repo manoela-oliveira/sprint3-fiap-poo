@@ -10,7 +10,7 @@ public class Manutencao {
         this.setData(data);
         this.responsavel = responsavel;
         this.localizador = localizador;
-        this.setDefinirServico(servico);
+        this.setServico(servico);
     }
 
     public String getData() {
@@ -18,10 +18,11 @@ public class Manutencao {
     }
 
     private void setData(String data) {
-        if (data != null) {
+    
+        if (data != null && !data.trim().isEmpty()) {
             this.data = data;
         } else {
-            System.out.println("Erro! Por favor, defina uma data válida.");
+            throw new IllegalArgumentException("Erro! Por favor, defina uma data válida.");
         }
     }
 
@@ -33,15 +34,15 @@ public class Manutencao {
         return this.localizador;
     }
 
-    public IntervencaoOperacional getDefinirServico() {
+    public IntervencaoOperacional getServico() {
         return this.servico;
     }
 
-    private void setDefinirServico(IntervencaoOperacional servicoRecomendado) {
+    private void setServico(IntervencaoOperacional servicoRecomendado) {
         if (servicoRecomendado != null) {
             this.servico = servicoRecomendado;
         } else {
-            System.out.println("Erro! O serviço de intervenção não pode ser nulo.");
+            throw new IllegalArgumentException("Erro! O serviço de intervenção não pode ser nulo.");
         }
     }
 

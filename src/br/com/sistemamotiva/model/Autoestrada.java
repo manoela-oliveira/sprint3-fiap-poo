@@ -16,7 +16,7 @@ public class Autoestrada extends TrechoRodovia {
         if (quantidadeFaixas >= 1) {
             this.quantidadeFaixas = quantidadeFaixas;
         } else {
-            System.out.println("Erro! É obrigatório que haja pelo menos uma faixa no trecho rodoviário.");
+            throw new IllegalArgumentException("Erro! É obrigatório que haja pelo menos uma faixa no trecho rodoviário.");
         }
     }
 
