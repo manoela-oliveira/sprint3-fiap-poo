@@ -15,9 +15,9 @@ O objetivo macro desta Sprint é evoluir a arquitetura do sistema implementando 
     </li>
     <li>Incluir classe de conexão configurada para acesso ao Oracle.
     </li>
-    <li>Garantir padrão **DAO** (Data Access Object) implementado para todas as entidades.
+    <li>Garantir padrão DAO (Data Access Object) implementado para todas as entidades.
     </li>
-    <li>Criar 'RelatorioPrioridadeDAO' implementado com uso do *Java Record*.
+    <li>Criar 'RelatorioPrioridadeDAO' implementado com uso do Java Record.
     </li>
     <li>Criar 'GeradorRelatorio.java' evoluído para persistir o histórico no banco de dados.
     </li>
