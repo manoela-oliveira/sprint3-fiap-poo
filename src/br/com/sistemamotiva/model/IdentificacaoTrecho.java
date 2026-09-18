@@ -9,6 +9,8 @@ package br.com.sistemamotiva.model;
   - Onde começa (Km)
   - Onde termina (Km) */
 
+import br.com.sistemamotiva.exception.TrechoInvalidoException;
+
 public class IdentificacaoTrecho {
 
     private final String codigoIdentificacao;

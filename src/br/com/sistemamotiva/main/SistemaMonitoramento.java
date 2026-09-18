@@ -28,24 +28,32 @@ public class SistemaMonitoramento {
 
             br.com.sistemamotiva.db.InicializadorBanco.criarTabelasSeNaoExistirem();
 
+
             // RESILIÊNCIA E REGRAS DE POO EM MEMÓRIA (FAIL-FAST)
-            imprimirSeparador("Estresse de Regras de Domínio e Proteção POO");
+             imprimirSeparador("BATERIA 2: Estresse de Regras de Domínio e Proteção POO");
 
             System.out.println("\n[Teste 2.1] Tentativa de criar equipe abaixo do limite regulatório (mínimo 2):");
-            EquipeManutencao equipeSubdimensionada = new EquipeManutencao("Gama-Invalida", 1);
-            System.out.println("Resultado da Validação: " + equipeSubdimensionada.getQuantidadeMembros() + " membros atribuídos por segurança.");
+            try {
+                new EquipeManutencao("Gama-Invalida", 1);
+                System.err.println("FALHA: O sistema permitiu criar equipe com 1 membro!");
+            } catch (br.com.sistemamotiva.exception.EquipeInvalidaException e) {
+                System.out.println("SUCESSO (Fail-Fast): Exceção capturada com a mensagem -> " + e.getMessage());
+            }
 
             System.out.println("\n[Teste 2.2] Tentativa de cadastrar quilometragem negativa em Trecho:");
-            IdentificacaoTrecho localInvalido = new IdentificacaoTrecho("BR-TESTE-NEG", -15.0, -5.0);
-            System.out.printf("Resultado da Validação: KM Inicial: %.1f | KM Final: %.1f\n",
-                    localInvalido.getQuilometroInicial(), localInvalido.getQuilometroFinal());
+            try {
+                new IdentificacaoTrecho("BR-TESTE-NEG", -15.0, -5.0);
+                System.err.println("FALHA: O sistema permitiu quilometragem negativa!");
+            } catch (br.com.sistemamotiva.exception.TrechoInvalidoException e) {
+                System.out.println("SUCESSO (Fail-Fast): Exceção capturada com a mensagem -> " + e.getMessage());
+            }
 
             System.out.println("\n[Teste 2.3] Proteção da Legislação Ambiental (Roçada nunca < 5.0cm):");
             IdentificacaoTrecho localEcol = new IdentificacaoTrecho("BR-ECO-01", 0.0, 10.0);
             TrechoRodovia autoestradaEcologica = new Autoestrada(localEcol, 25.0, 2);
             System.out.println("Vegetação Pré-Intervenção: " + autoestradaEcologica.getNivelVegetacaoCm() + "cm");
             autoestradaEcologica.atualizarNivelVegetacao(1.5); // Tentativa predatória
-            System.out.println("Vegetação Pós-Intervenção: " + autoestradaEcologica.getNivelVegetacaoCm() + "cm (Mínimo ecológico preservado)");
+            System.out.println("Vegetação Pós-Intervenção: " + autoestradaEcologica.getNivelVegetacaoCm() + "cm (Mínimo ecológico preservado com sucesso!)");
 
             // CRUD DE EQUIPE DE MANUTENÇÃO (JDBC)
             imprimirSeparador("Operações CRUD - Entidade EquipeManutencao");
