@@ -142,7 +142,7 @@ O projeto necessita do 'ojdbc17.jar' para se comunicar com o banco:
 
 ---
 
-## Destaques Técnicos do Projeto (Diferenciais)
+## Destaques Técnicos
 - **Design Padrão Single Table:** Utilizamos polimorfismo no banco de dados. Os trechos de rodovia são salvos em uma única tabela, e o DAO recria automaticamente as subclasses ('Autoestrada' ou 'EstradaVicinal') via 'instanceof'.
 - **Validação Fail-Fast:** Aplicamos validações rígidas direto no modelo ('Autoestrada', 'Manutencao'). O sistema lança exceções (*IllegalArgumentException*) impedindo que objetos fiquem em estado inválido na memória, protegendo antes mesmo do DAO tentar inserir no banco.
 - **Clean Code (Regra de Três Parâmetros):** O *Value Object* 'IdentificacaoTrecho' foi criado especificamente para evitar que 'TrechoRodovia' recebesse múltiplos parâmetros primitivos no construtor.
