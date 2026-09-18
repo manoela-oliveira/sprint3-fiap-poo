@@ -1,51 +1,143 @@
 package br.com.sistemamotiva.main;
 
-import br.com.sistemamotiva.model.Autoestrada;
-import br.com.sistemamotiva.model.AutoestradaSensorizada;
-import br.com.sistemamotiva.model.EquipeManutencao;
-import br.com.sistemamotiva.model.EstradaVicinal;
-import br.com.sistemamotiva.model.IdentificacaoTrecho;
-import br.com.sistemamotiva.model.IntervencaoOperacional;
-import br.com.sistemamotiva.model.MockTrechoSensorizado;
-import br.com.sistemamotiva.model.MonitoravelViaIoT;
-import br.com.sistemamotiva.model.RocadaMecanizada;
+import br.com.sistemamotiva.dao.EquipeManutencaoDAO;
+import br.com.sistemamotiva.dao.IntervencaoOperacionalDAO;
+import br.com.sistemamotiva.dao.RelatorioPrioridadeDAO;
+import br.com.sistemamotiva.dao.TrechoRodoviaDAO;
+import br.com.sistemamotiva.db.ConexaoBanco;
+import br.com.sistemamotiva.exception.CredenciaisInvalidasException;
+import br.com.sistemamotiva.model.*;
 import br.com.sistemamotiva.service.GeradorRelatorio;
+import java.sql.Connection;
+import java.util.List;
 
 public class SistemaMonitoramento {
+
     public static void main(String[] args) {
-        System.out.println("\n======= TESTE DE INTEGRAÇÃO LOCAL (SEM BANCO) =======");
+        System.out.println("\n==================================================================");
+        System.out.println("   PISTA DE TESTES MOTIVA: INTEGRAÇÃO JDBC & VALIDAÇÃO POO");
+        System.out.println("==================================================================");
 
-        // 1. Testando modelos e herança (Autoestrada e EstradaVicinal)
-        IdentificacaoTrecho iden1 = new IdentificacaoTrecho("BR-101-KM10", 0.0, 10.0);
-        Autoestrada auto = new Autoestrada(iden1, 35.0, 4); // Nível > 30cm -> Prioridade CRITICA
+        Connection conexaoTeste = null;
 
-        IdentificacaoTrecho iden2 = new IdentificacaoTrecho("VIC-PAV-01", 0.0, 5.0);
-        EstradaVicinal vic = new EstradaVicinal(iden2, 15.0, true);
+        try {
+            // CONECTIVIDADE COM O BANCO DE DADOS ORACLE
+            imprimirSeparador("Teste de Infraestrutura e Conexão");
+            conexaoTeste = ConexaoBanco.getConexao();
+            System.out.println("Status da Conexão: ATIVA (Oracle DB alcançado com sucesso)");
 
-        System.out.println("Trecho 1: " + auto.getIdentificador().getCodigoIdentificacao() + " | Prioridade: " + auto.calcularPrioridade());
-        System.out.println("Trecho 2: " + vic.getIdentificador().getCodigoIdentificacao() + " | Prioridade: " + vic.calcularPrioridade());
+            br.com.sistemamotiva.db.InicializadorBanco.criarTabelasSeNaoExistirem();
 
-        // 2. Testando serviços e polimorfismo das intervenções
-        System.out.println("\n--- Testando Intervenções em Memória ---");
-        IntervencaoOperacional rocada = new RocadaMecanizada();
-        System.out.println("Vegetação antes da roçada: " + auto.getNivelVegetacaoCm() + "cm");
-        rocada.executarServico(auto);
-        System.out.println("Vegetação após roçada: " + auto.getNivelVegetacaoCm() + "cm");
+            // RESILIÊNCIA E REGRAS DE POO EM MEMÓRIA (FAIL-FAST)
+            imprimirSeparador("Estresse de Regras de Domínio e Proteção POO");
 
-        // 3. Testando Equipe de Manutenção
-        System.out.println("\n--- Testando Equipe ---");
-        EquipeManutencao equipe = new EquipeManutencao("Equipe Alfa", 3);
-        System.out.println(equipe);
+            System.out.println("\n[Teste 2.1] Tentativa de criar equipe abaixo do limite regulatório (mínimo 2):");
+            EquipeManutencao equipeSubdimensionada = new EquipeManutencao("Gama-Invalida", 1);
+            System.out.println("Resultado da Validação: " + equipeSubdimensionada.getQuantidadeMembros() + " membros atribuídos por segurança.");
 
-        // 4. Testando IoT e Mock
-        System.out.println("\n--- Testando Sensores IoT ---");
-        MockTrechoSensorizado mock = new MockTrechoSensorizado(22.4);
-        AutoestradaSensorizada autoSensor = new AutoestradaSensorizada(new IdentificacaoTrecho("SMART-01", 10, 20), 18.0, 2);
-        
-        GeradorRelatorio gerador = new GeradorRelatorio();
-        gerador.processarLeiturasIoT(new MonitoravelViaIoT[] { mock, autoSensor });
+            System.out.println("\n[Teste 2.2] Tentativa de cadastrar quilometragem negativa em Trecho:");
+            IdentificacaoTrecho localInvalido = new IdentificacaoTrecho("BR-TESTE-NEG", -15.0, -5.0);
+            System.out.printf("Resultado da Validação: KM Inicial: %.1f | KM Final: %.1f\n",
+                    localInvalido.getQuilometroInicial(), localInvalido.getQuilometroFinal());
 
-        System.out.println("\nSUCESSO! Toda a lógica de negócio, OO e pacotes compilaram perfeitamente no VS Code!");
-        System.out.println("Próximo passo: Rodar os scripts SQL no Oracle para depois testar os DAOs.");
+            System.out.println("\n[Teste 2.3] Proteção da Legislação Ambiental (Roçada nunca < 5.0cm):");
+            IdentificacaoTrecho localEcol = new IdentificacaoTrecho("BR-ECO-01", 0.0, 10.0);
+            TrechoRodovia autoestradaEcologica = new Autoestrada(localEcol, 25.0, 2);
+            System.out.println("Vegetação Pré-Intervenção: " + autoestradaEcologica.getNivelVegetacaoCm() + "cm");
+            autoestradaEcologica.atualizarNivelVegetacao(1.5); // Tentativa predatória
+            System.out.println("Vegetação Pós-Intervenção: " + autoestradaEcologica.getNivelVegetacaoCm() + "cm (Mínimo ecológico preservado)");
+
+            // CRUD DE EQUIPE DE MANUTENÇÃO (JDBC)
+            imprimirSeparador("Operações CRUD - Entidade EquipeManutencao");
+            EquipeManutencaoDAO equipeDAO = new EquipeManutencaoDAO();
+
+            System.out.println("\n[CRUD C] Inserindo nova equipe operacional...");
+            EquipeManutencao equipeOperacional = new EquipeManutencao("Equipe Delta-Frente", 3);
+            equipeDAO.inserir(equipeOperacional);
+            System.out.println("Registro criado no Oracle: " + equipeOperacional);
+
+            System.out.println("\n[CRUD R] Consultando equipe por ID (" + equipeOperacional.getId() + ")...");
+            EquipeManutencao equipeConsultada = equipeDAO.buscarPorId(equipeOperacional.getId());
+            System.out.println("Registro recuperado: " + equipeConsultada);
+
+            System.out.println("\n[CRUD U] Atualizando quantidade de membros da equipe...");
+            equipeConsultada.setQuantidadeMembros(5);
+            equipeDAO.atualizar(equipeConsultada);
+            EquipeManutencao equipeAtualizada = equipeDAO.buscarPorId(equipeConsultada.getId());
+            System.out.println("Registro após atualização: " + equipeAtualizada);
+
+            // CRUD DE TRECHOS RODOVIÁRIOS (POLIMORFISMO & PERSISTÊNCIA)
+            imprimirSeparador("Operações CRUD - Entidade TrechoRodovia");
+            TrechoRodoviaDAO trechoDAO = new TrechoRodoviaDAO();
+
+            System.out.println("\n[CRUD C] Inserindo trecho com vegetação crítica...");
+            IdentificacaoTrecho localCritico = new IdentificacaoTrecho("BR-381-MINAS", 100.0, 120.0);
+            Autoestrada trechoCritico = new Autoestrada(localCritico, 38.0, 4);
+            trechoDAO.inserir(trechoCritico);
+            System.out.println("Trecho persistido: ID " + trechoCritico.getId() + " | Prioridade: " + trechoCritico.calcularPrioridade());
+
+            System.out.println("\n[CRUD R] Listando todos os trechos registrados no banco Oracle:");
+            List<TrechoRodovia> trechosCadastrados = trechoDAO.listarTodas();
+            trechosCadastrados.forEach(TrechoRodovia::exibirInformacoes);
+
+            // CRUD DE INTERVENÇÕES OPERACIONAIS
+            imprimirSeparador("Operações CRUD - Intervenção Operacional");
+            IntervencaoOperacionalDAO intervencaoDAO = new IntervencaoOperacionalDAO();
+
+            System.out.println("\n[CRUD R] Carregando serviços catalogados no banco:");
+            List<IntervencaoOperacional> intervencoes = intervencaoDAO.listarTodas();
+            intervencoes.forEach(System.out::println);
+
+            // GERADOR DE RELATÓRIO COM PERSISTÊNCIA DE HISTÓRICO
+            imprimirSeparador("Serviço de Domínio e Gravação de Relatório");
+            GeradorRelatorio gerador = new GeradorRelatorio();
+
+            System.out.println("\nProcessando malha rodoviária capturada do banco...");
+            TrechoRodovia[] malhaParaAnalise = trechosCadastrados.toArray(new TrechoRodovia[0]);
+            gerador.gerarRelatorio(malhaParaAnalise);
+
+            // AUDITORIA DE HISTÓRICO NO ORACLE (VIA RECORD)
+            imprimirSeparador("Auditoria e Consulta do Histórico de Relatórios");
+            RelatorioPrioridadeDAO relatorioDAO = new RelatorioPrioridadeDAO();
+
+            List<RelatorioPrioridadeDAO.RelatorioRegistro> historico = relatorioDAO.listarTodas();
+            System.out.println("Total de relatórios arquivados no Oracle: " + historico.size());
+            historico.forEach(registro -> System.out.printf(
+                    "• Relatório #%d [%s] -> Críticos: %d | Altos: %d | Baixos: %d | Obs: %s\n",
+                    registro.id(), registro.dataGeracao(), registro.qtCritico(),
+                    registro.qtAlta(), registro.qtBaixa(), registro.resumo()
+            ));
+
+            // DELETAR/LIMPEZA DE DADOS TEMPORÁRIOS DE TESTE
+            imprimirSeparador("Finalização do Ciclo CRUD (Delete)");
+            System.out.println("\n[CRUD D] Removendo equipe de teste ID: " + equipeOperacional.getId());
+            equipeDAO.deletar(equipeOperacional.getId());
+            System.out.println("Remoção confirmada.");
+
+            System.out.println("\n[CRUD D] Removendo trecho de teste ID: " + trechoCritico.getId());
+            trechoDAO.deletar(trechoCritico.getId());
+            System.out.println("Remoção confirmada.");
+
+            System.out.println("\n==================================================================");
+            System.out.println(" PISTA DE TESTES FINALIZADA COM SUCESSO!");
+            System.out.println("==================================================================");
+
+        } catch (CredenciaisInvalidasException e) {
+            System.err.println("\n FALHA CRÍTICA DE AUTENTICAÇÃO:");
+            System.err.println(e.getMessage());
+            System.err.println(e.getDicaCorrecao());
+        } catch (Exception e) {
+            System.err.println("\n FALHA INESPERADA NA EXECUÇÃO DOS TESTES:");
+            System.err.println("Motivo: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            ConexaoBanco.fechar(conexaoTeste);
+        }
+    }
+
+    private static void imprimirSeparador(String titulo) {
+        System.out.println("\n------------------------------------------------------------------");
+        System.out.println(">> " + titulo);
+        System.out.println("------------------------------------------------------------------");
     }
 }
