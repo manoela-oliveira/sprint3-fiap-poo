@@ -25,9 +25,7 @@ public class SistemaMonitoramento {
             imprimirSeparador("Teste de Infraestrutura e Conexão");
             conexaoTeste = ConexaoBanco.getConexao();
             System.out.println("Status da Conexão: ATIVA (Oracle DB alcançado com sucesso)");
-
-            br.com.sistemamotiva.db.InicializadorBanco.criarTabelasSeNaoExistirem();
-
+            System.out.println("Nota: As tabelas devem ter sido criadas previamente via script SQL.");
 
             // RESILIÊNCIA E REGRAS DE POO EM MEMÓRIA (FAIL-FAST)
              imprimirSeparador("BATERIA 2: Estresse de Regras de Domínio e Proteção POO");
