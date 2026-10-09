@@ -147,3 +147,33 @@ O projeto necessita do 'ojdbc17.jar' para se comunicar com o banco:
 - **Validação Fail-Fast:** Aplicamos validações rígidas direto no modelo ('Autoestrada', 'Manutencao'). O sistema lança exceções (*IllegalArgumentException*) impedindo que objetos fiquem em estado inválido na memória, protegendo antes mesmo do DAO tentar inserir no banco.
 - **Clean Code (Regra de Três Parâmetros):** O *Value Object* 'IdentificacaoTrecho' foi criado especificamente para evitar que 'TrechoRodovia' recebesse múltiplos parâmetros primitivos no construtor.
 - **Fechamento Seguro:** Todos os recursos JDBC ('Connection', 'PreparedStatement', 'ResultSet') estão devidamente tratados em blocos 'try/catch/finally' prevenindo vazamento de memória.
+
+## Correções Professor
+
+### Pontos Fortes
+
+* **Mapeamento de Herança (Single-Table):**
+  * Implementação bem resolvida nos DAOs (`TrechoRodoviaDAO` e `IntervencaoOperacionalDAO`).
+  * Reconstrução adequada dos subtipos (`Autoestrada`/`EstradaVicinal` e `Rocada`/`Pulverizacao`) a partir da coluna discriminadora de tipo.
+  * Uso correto de `getGeneratedKeys()` nas operações de `INSERT`.
+
+* **Arquitetura e Boas Práticas:**
+  * Camadas limpas e bem delimitadas (`db`, `dao`, `model`, `service`, `main`, `exception`).
+  * SQL 100% centralizado no pacote `dao/`.
+  * Fechamento de recursos no padrão `try/catch/finally` utilizando classe helper nos 4 DAOs.
+  * Exceções de domínio próprias com dicas de correção (ex: `CredenciaisInvalidasException`).
+
+* **Fluxo de Negócio e Documentação:**
+  * Ciclo do relatório completo: geração a partir dos trechos do banco, persistência via `RelatorioPrioridadeDAO` e auditoria de histórico no `Main`.
+  * Cada DAO documentado individualmente no `README.md`.
+
+
+### Pendências
+
+* **Integridade Referencial no DDL:**
+  * **Problema:** Nenhuma `FOREIGN KEY` configurada no DDL; as tabelas `intervencoes` e `trechos` estão sem integridade referencial no banco de dados.
+  * **Solução:** Adicionar restrições de `REFERENCES` vinculando `intervencoes.id_trecho` a `trechos(id)` e o relacionamento com a tabela de equipe, configurando a regra adequada para o `DELETE`.
+
+* **Operações Incompletas em RelatorioPrioridadeDAO:**
+  * **Problema:** Ausência dos métodos `buscarPorId`, `atualizar` e `deletar` (o requisito exigia CRUD completo por entidade).
+  * **Solução:** Implementar as 3 operações restantes seguindo o mesmo padrão dos outros DAOs da aplicação.
