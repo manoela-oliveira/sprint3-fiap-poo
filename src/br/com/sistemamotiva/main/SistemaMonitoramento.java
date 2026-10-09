@@ -114,13 +114,44 @@ public class SistemaMonitoramento {
                     registro.qtAlta(), registro.qtBaixa(), registro.resumo()
             ));
 
-            // DELETAR/LIMPEZA DE DADOS TEMPORÁRIOS DE TESTE
-            imprimirSeparador("Finalização do Ciclo CRUD (Delete)");
-            System.out.println("\n[CRUD D] Removendo equipe de teste ID: " + equipeOperacional.getId());
+            // TESTES CRUD DO RELATÓRIO
+            if (!historico.isEmpty()) {
+                imprimirSeparador("Operações CRUD Faltantes - RelatorioPrioridadeDAO (Correção Professor)");
+                
+                // Pegando o primeiro relatório da lista para fazer o teste
+                RelatorioPrioridadeDAO.RelatorioRegistro relatorioOriginal = historico.get(0);
+                Long idTeste = relatorioOriginal.id();
+
+                System.out.println("\n[CRUD R] Buscando Relatório específico pelo ID (" + idTeste + ")...");
+                RelatorioPrioridadeDAO.RelatorioRegistro relatorioBuscado = relatorioDAO.buscarPorId(idTeste);
+                System.out.println("Encontrado: " + relatorioBuscado);
+
+                System.out.println("\n[CRUD U] Atualizando o resumo do relatório...");
+                // Criando uma cópia imutável (Record) com o novo resumo
+                RelatorioPrioridadeDAO.RelatorioRegistro relatorioAtualizado = new RelatorioPrioridadeDAO.RelatorioRegistro(
+                        idTeste,
+                        relatorioBuscado.dataGeracao(),
+                        relatorioBuscado.qtCritico(),
+                        relatorioBuscado.qtAlta(),
+                        relatorioBuscado.qtBaixa(),
+                        relatorioBuscado.resumo() + " [REVISADO PELO SISTEMA]"
+                );
+                relatorioDAO.atualizar(relatorioAtualizado);
+                System.out.println("Atualização concluída. Verificando persistência:");
+                System.out.println("Registro Pós-Update: " + relatorioDAO.buscarPorId(idTeste));
+
+                System.out.println("\n[CRUD D] Deletando o relatório de teste...");
+                relatorioDAO.deletar(idTeste);
+                System.out.println("Relatório ID " + idTeste + " apagado com sucesso.");
+            }
+
+            // DELETAR/LIMPEZA DE DADOS TEMPORÁRIOS
+            imprimirSeparador("Finalização do Ciclo CRUD (Limpeza)");
+            System.out.println("\nRemovendo equipe de teste ID: " + equipeOperacional.getId());
             equipeDAO.deletar(equipeOperacional.getId());
             System.out.println("Remoção confirmada.");
 
-            System.out.println("\n[CRUD D] Removendo trecho de teste ID: " + trechoCritico.getId());
+            System.out.println("\nRemovendo trecho de teste ID: " + trechoCritico.getId());
             trechoDAO.deletar(trechoCritico.getId());
             System.out.println("Remoção confirmada.");
 
