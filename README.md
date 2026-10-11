@@ -138,7 +138,7 @@ O projeto necessita do 'ojdbc17.jar' para se comunicar com o banco:
 1. No explorador de arquivos, abra a classe principal: 'src/br/com/sistemamotiva/main/SistemaMonitoramento.java'.
 2. Acima do método 'public static void main(String[] args)', o VS Code exibirá um botão escrito **Run** (Executar).
 3. Clique em **Run**.
-4. Acompanhe no terminal integrado do VS Code a demonstração completa dos testes de infraestrutura, proteções POO, operações CRUD e geração do relatório em banco!
+4. Acompanhe no terminal integrado do VS Code a demonstração completa dos testes de infraestrutura, proteções POO, operações CRUD e geração do relatório em banco.
 
 ---
 
